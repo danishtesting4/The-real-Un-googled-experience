@@ -1,0 +1,169 @@
+﻿replaced by CRLF the next time Git touches it
++ git diff --no-index "C:/Users/danis/AppData/Local/Temp/opencode/new_t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+'chrome/browser/ui/webui/new_tab_page/new_tab_page_handler.cc', LF 
+will be replaced by CRLF the next time Git touches it
+diff --git a/chrome/browser/ui/webui/new_tab_page/new_tab_page_handler.cc b/chrome/browser/ui/webui/new_tab_page/new_tab_page_handler.cc
+index ed87fbe..f9a250e 100644
+--- a/chrome/browser/ui/webui/new_tab_page/new_tab_page_handler.cc
++++ b/chrome/browser/ui/webui/new_tab_page/new_tab_page_handler.cc
+@@ -276,6 +276,49 @@ new_tab_page::mojom::ImageDoodlePtr MakeImageDoodle(
+   }
+   return doodle;
+ }
++
++// Returns true if |url| points at a Google or YouTube property that must not be
++// offered as a New Tab Page shortcut (GoogleZero blacklist).
++bool IsBlockedNtpShortcutUrl(const GURL& url) {
++  if (!url.is_valid())
++    return false;
++  std::string host = base::ToLowerASCII(url.host());
++  // GURL normalizes the host to lowercase, but be defensive.
++  // (No transformation needed; comparison is case-insensitive by construction.)
++
++  auto domain_matches = [&host](const std::string& domain) {
++    if (host == domain)
++      return true;
++    if (host.size() > domain.size() + 1 &&
++        host.compare(host.size() - domain.size(), domain.size(), domain) == 0 &&
++        host[host.size() - domain.size() - 1] == '.') {
++      return true;
++    }
++    return false;
++  };
++
++  // google.com and all of its subdomains.
++  if (domain_matches("google.com"))
++    return true;
++  // Domains ending in the .google TLD.
++  const std::string google_tld = ".google";
++  if (host.size() > google_tld.size() &&
++      host.compare(host.size() - google_tld.size(), google_tld.size(),
++                   google_tld) == 0) {
++    return true;
++  }
++  // youtube.com and all of its subdomains.
++  if (domain_matches("youtube.com"))
++    return true;
++  // youtu.be (exact host).
++  if (host == "youtu.be")
++    return true;
++  // youtube-nocookie.com and all of its subdomains.
++  if (domain_matches("youtube-nocookie.com"))
++    return true;
++
++  return false;
++}
+ }  // namespace
+ NewTabPageHandler::NewTabPageHandler(
+     mojo::PendingReceiver<new_tab_page::mojom::PageHandler>
+@@ -339,6 +382,11 @@ void NewTabPageHandler::AddMostVisitedTile(
+     const GURL& url,
+     const std::string& title,
+     AddMostVisitedTileCallback callback) {
++  // GoogleZero: reject blocked shortcuts.
++  if (IsBlockedNtpShortcutUrl(url)) {
++    std::move(callback).Run(false);
++    return;
++  }
+   bool success = instant_service_->AddCustomLink(url, title);
+   std::move(callback).Run(success);
+   NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+@@ -480,6 +528,16 @@ void NewTabPageHandler::UpdateMostVisitedTile(
+     const GURL& new_url,
+     const std::string& new_title,
+     UpdateMostVisitedTileCallback callback) {
++  // GoogleZero: reject edits that would point a shortcut at a blocked URL.
++  if (new_url != url && IsBlockedNtpShortcutUrl(new_url)) {
++    std::move(callback).Run(false);
++    return;
++  }
++  // Also reject if the (unchanged) destination itself is blocked.
++  if (new_url == url && IsBlockedNtpShortcutUrl(url)) {
++    std::move(callback).Run(false);
++    return;
++  }
+   bool success = instant_service_->UpdateCustomLink(
+       url, new_url != url ? new_url : GURL(), new_title);
+   std::move(callback).Run(success);
+@@ -960,6 +1018,9 @@ void NewTabPageHandler::MostVisitedInfoChanged(
+   std::vector<new_tab_page::mojom::MostVisitedTilePtr> list;
+   auto result = new_tab_page::mojom::MostVisitedInfo::New();
+   for (auto& tile : info.items) {
++    // GoogleZero: never show blocked Google/YouTube shortcuts.
++    if (IsBlockedNtpShortcutUrl(tile.url))
++      continue;
+     auto value = new_tab_page::mojom::MostVisitedTile::New();
+     if (tile.title.empty()) {
+       value->title = tile.url.spec();
+replaced by CRLF the next time Git touches it
++ git diff --no-index "C:/Users/danis/AppData/Local/Temp/opencode/insta ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+'chrome/browser/search/instant_service.cc', LF will be replaced by 
+CRLF the next time Git touches it
+diff --git a/chrome/browser/search/instant_service.cc b/chrome/browser/search/instant_service.cc
+index e10a244..d6043a5 100644
+--- a/chrome/browser/search/instant_service.cc
++++ b/chrome/browser/search/instant_service.cc
+@@ -161,6 +161,38 @@ void CopyFileToProfilePath(const base::FilePath& from_path,
+ SkColor GetBitmapMainColor(const SkBitmap& bitmap) {
+   return color_utils::CalculateKMeanColorOfBitmap(bitmap);
+ }
++
++// GoogleZero: returns true if |url| is a blocked Google/YouTube shortcut URL.
++bool IsBlockedNtpShortcutUrl(const GURL& url) {
++  if (!url.is_valid())
++    return false;
++  std::string host = base::ToLowerASCII(url.host());
++  auto domain_matches = [&host](const std::string& domain) {
++    if (host == domain)
++      return true;
++    if (host.size() > domain.size() + 1 &&
++        host.compare(host.size() - domain.size(), domain.size(), domain) == 0 &&
++        host[host.size() - domain.size() - 1] == '.') {
++      return true;
++    }
++    return false;
++  };
++  if (domain_matches("google.com"))
++    return true;
++  const std::string google_tld = ".google";
++  if (host.size() > google_tld.size() &&
++      host.compare(host.size() - google_tld.size(), google_tld.size(),
++                   google_tld) == 0) {
++    return true;
++  }
++  if (domain_matches("youtube.com"))
++    return true;
++  if (host == "youtu.be")
++    return true;
++  if (domain_matches("youtube-nocookie.com"))
++    return true;
++  return false;
++}
+ }  // namespace
+ const char kNtpCustomBackgroundMainColor[] = "background_main_color";
+ InstantService::InstantService(Profile* profile)
+@@ -266,12 +298,20 @@ void InstantService::UndoAllMostVisitedDeletions() {
+   }
+ }
+ bool InstantService::AddCustomLink(const GURL& url, const std::string& title) {
++  // GoogleZero: do not save blocked shortcuts.
++  if (IsBlockedNtpShortcutUrl(url))
++    return false;
+   return most_visited_sites_ &&
+          most_visited_sites_->AddCustomLink(url, base::UTF8ToUTF16(title));
+ }
+ bool InstantService::UpdateCustomLink(const GURL& url,
+                                       const GURL& new_url,
+                                       const std::string& new_title) {
++  // GoogleZero: reject edits whose destination is blocked.
++  if (new_url.is_valid() && IsBlockedNtpShortcutUrl(new_url))
++    return false;
++  if (!new_url.is_valid() && IsBlockedNtpShortcutUrl(url))
++    return false;
+   return most_visited_sites_ && most_visited_sites_->UpdateCustomLink(
+                                     url, new_url, base::UTF8ToUTF16(new_title));
+ }

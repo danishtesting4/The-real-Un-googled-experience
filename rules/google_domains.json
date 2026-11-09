@@ -1,0 +1,170 @@
+﻿
+[
+  {
+    "id": 1,
+    "priority": 100,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com^",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 100,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "regexFilter": "^https?://([a-z0-9-]+\\.)+google([:/?#]|$)",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9001,
+    "priority": 1000,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "urlFilter": "||youtube.com^",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9002,
+    "priority": 1000,
+    "action": {"type": "block"},
+    "condition": {
+      "urlFilter": "||youtube.com^",
+      "excludedResourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9003,
+    "priority": 1000,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "urlFilter": "||youtu.be^",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9004,
+    "priority": 1000,
+    "action": {"type": "block"},
+    "condition": {
+      "urlFilter": "||youtu.be^",
+      "excludedResourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9005,
+    "priority": 1000,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "urlFilter": "||youtube-nocookie.com^",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9006,
+    "priority": 1000,
+    "action": {"type": "block"},
+    "condition": {
+      "urlFilter": "||youtube-nocookie.com^",
+      "excludedResourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9007,
+    "priority": 1000,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "urlFilter": "||youtubei.googleapis.com^",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9008,
+    "priority": 1000,
+    "action": {"type": "block"},
+    "condition": {
+      "urlFilter": "||youtubei.googleapis.com^",
+      "excludedResourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9009,
+    "priority": 1000,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "urlFilter": "||ytimg.com^",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9010,
+    "priority": 1000,
+    "action": {"type": "block"},
+    "condition": {
+      "urlFilter": "||ytimg.com^",
+      "excludedResourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9011,
+    "priority": 1000,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://chrome.9oo91e.qjz9zk/webstore?hl=en-GB"
+      }
+    },
+    "condition": {
+      "urlFilter": "||googlevideo.com^",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 9012,
+    "priority": 1000,
+    "action": {"type": "block"},
+    "condition": {
+      "urlFilter": "||googlevideo.com^",
+      "excludedResourceTypes": ["main_frame"]
+    }
+  }
+]
+	

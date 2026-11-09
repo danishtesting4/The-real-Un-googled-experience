@@ -1,0 +1,64 @@
+diff --git a/chrome/browser/search/instant_service.cc b/chrome/browser/search/instant_service.cc
+index e10a244..20014af 100644
+--- a/chrome/browser/search/instant_service.cc
++++ b/chrome/browser/search/instant_service.cc
+@@ -161,6 +161,38 @@ void CopyFileToProfilePath(const base::FilePath& from_path,
+ SkColor GetBitmapMainColor(const SkBitmap& bitmap) {
+   return color_utils::CalculateKMeanColorOfBitmap(bitmap);
+ }
++
++// GoogleZero: returns true if |url| is a blocked Google/YouTube shortcut URL.
++bool IsBlockedNtpShortcutUrl(const GURL& url) {
++  if (!url.is_valid())
++    return false;
++  std::string host = base::ToLowerASCII(url.host());
++  auto domain_matches = [&host](const std::string& domain) {
++    if (host == domain)
++      return true;
++    if (host.size() > domain.size() + 1 &&
++        host.compare(host.size() - domain.size(), domain.size(), domain) == 0 &&
++        host[host.size() - domain.size() - 1] == '.') {
++      return true;
++    }
++    return false;
++  };
++  if (domain_matches("google.com"))
++    return true;
++  const std::string google_tld = ".google";
++  if (host.size() > google_tld.size() &&
++      host.compare(host.size() - google_tld.size(), google_tld.size(),
++                   google_tld) == 0) {
++    return true;
++  }
++  if (domain_matches("youtube.com"))
++    return true;
++  if (host == "youtu.be")
++    return true;
++  if (domain_matches("youtube-nocookie.com"))
++    return true;
++  return false;
++}
+ }  // namespace
+ const char kNtpCustomBackgroundMainColor[] = "background_main_color";
+ InstantService::InstantService(Profile* profile)
+@@ -266,12 +298,20 @@ void InstantService::UndoAllMostVisitedDeletions() {
+   }
+ }
+ bool InstantService::AddCustomLink(const GURL& url, const std::string& title) {
++  // GoogleZero: do not save invalid or blocked shortcuts.
++  if (!url.is_valid() || IsBlockedNtpShortcutUrl(url))
++    return false;
+   return most_visited_sites_ &&
+          most_visited_sites_->AddCustomLink(url, base::UTF8ToUTF16(title));
+ }
+ bool InstantService::UpdateCustomLink(const GURL& url,
+                                       const GURL& new_url,
+                                       const std::string& new_title) {
++  // GoogleZero: reject edits whose destination is blocked.
++  if (new_url.is_valid() && IsBlockedNtpShortcutUrl(new_url))
++    return false;
++  if (!new_url.is_valid() && IsBlockedNtpShortcutUrl(url))
++    return false;
+   return most_visited_sites_ && most_visited_sites_->UpdateCustomLink(
+                                     url, new_url, base::UTF8ToUTF16(new_title));
+ }

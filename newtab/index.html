@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Tab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="brand">
+        <span class="brand-icon">0</span>
+        <span>GoogleZero</span>
+      </div>
+    </header>
+
+    <section class="shortcuts-section">
+      <div class="section-heading">
+        <h1>Shortcuts</h1>
+      </div>
+
+      <div id="shortcuts" class="shortcuts-grid"></div>
+
+      <button id="addShortcut" class="shortcut add-shortcut">
+        <span class="add-icon">+</span>
+        <span>Add shortcut</span>
+      </button>
+    </section>
+  </main>
+
+  <dialog id="shortcutDialog">
+    <form id="shortcutForm">
+      <h2>Add shortcut</h2>
+
+      <label for="shortcutName">Name</label>
+      <input id="shortcutName" type="text" placeholder="Website name" required maxlength="40">
+
+      <label for="shortcutUrl">URL</label>
+      <input id="shortcutUrl" type="text" placeholder="https://example.com" required>
+
+      <div class="dialog-actions">
+        <button type="button" id="cancelShortcut" class="secondary">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="newtab.js"></script>
+</body>
+</html>

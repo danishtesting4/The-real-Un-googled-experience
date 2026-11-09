@@ -1,0 +1,221 @@
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: Arial, sans-serif;
+  background: #15131a;
+  color: #f4f0fa;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 32px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 110px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #8154c7;
+  color: white;
+  font-weight: bold;
+}
+
+.shortcuts-section {
+  max-width: 700px;
+  margin: auto;
+}
+
+.section-heading h1 {
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 14px;
+}
+
+.shortcut {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 115px;
+  padding: 14px 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #201d27;
+  color: #eee8f7;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.shortcut:hover {
+  background: #292532;
+  border-color: #51415f;
+}
+
+.shortcut-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: #49375e;
+  color: #e6d5ff;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.shortcut-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.remove-shortcut {
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  border: 0;
+  background: transparent;
+  color: #a99bb7;
+  font-size: 17px;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.shortcut:hover .remove-shortcut {
+  opacity: 1;
+}
+
+.add-shortcut {
+  margin-top: 14px;
+  width: 110px;
+  background: transparent;
+  border-color: #38313f;
+  color: #c6bacf;
+}
+
+.add-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #302a38;
+  font-size: 25px;
+}
+
+dialog {
+  width: min(380px, calc(100% - 32px));
+  padding: 26px;
+  border: 1px solid #40364b;
+  border-radius: 16px;
+  background: #201d27;
+  color: #f4f0fa;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+dialog h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+form label {
+  display: block;
+  margin: 16px 0 7px;
+  font-size: 13px;
+  color: #c4b8d0;
+}
+
+form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #494050;
+  border-radius: 9px;
+  outline: none;
+  background: #17141c;
+  color: white;
+  font-size: 14px;
+}
+
+form input:focus {
+  border-color: #9564d4;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.dialog-actions button {
+  padding: 10px 17px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.primary {
+  background: #8154c7;
+  color: white;
+}
+
+.secondary {
+  background: #393340;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  header {
+    margin-bottom: 70px;
+  }
+
+  .shortcuts-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

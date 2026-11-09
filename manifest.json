@@ -1,0 +1,39 @@
+﻿
+{
+  "manifest_version": 3,
+  "name": "GoogleZero",
+  "version": "0.1.4",
+  "description": "A Google-free Chromium experience.",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": [
+    "*://google.com/*",
+    "*://*.google.com/*",
+    "*://*.google/*",
+    "*://youtube.com/*",
+    "*://*.youtube.com/*",
+    "*://youtu.be/*",
+    "*://youtube-nocookie.com/*",
+    "*://*.youtube-nocookie.com/*",
+    "*://youtubei.googleapis.com/*",
+    "*://ytimg.com/*",
+    "*://*.ytimg.com/*",
+    "*://googlevideo.com/*",
+    "*://*.googlevideo.com/*",
+    "https://chrome.9oo91e.qjz9zk/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "google_domains",
+        "enabled": true,
+        "path": "rules/google_domains.json"
+      }
+    ]
+  }
+}
